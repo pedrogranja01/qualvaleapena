@@ -102,4 +102,4 @@ if comparar:
 
         # Mostra imagem no final, após comparação
         st.markdown("---")
-        st.image("pic.jpeg", width=150, layout="centered")
+        st.image("pic.jpeg", width=150)

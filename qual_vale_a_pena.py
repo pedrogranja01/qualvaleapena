@@ -99,7 +99,3 @@ if comparar:
             st.success("✅ **Produto 2** tem melhor custo-benefício.")
         else:
             st.info("⚖️ Ambos os produtos têm o mesmo custo por unidade.")
-
-        # Mostra imagem no final, após comparação
-        st.markdown("---")
-        st.image("pic.jpeg", width=150)

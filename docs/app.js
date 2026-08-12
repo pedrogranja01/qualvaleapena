@@ -16,6 +16,10 @@ function formatarReais(valor) {
   return `R$ ${valor.toFixed(4).replace(".", ",")}`;
 }
 
+function formatarPercentual(valor) {
+  return `${valor.toFixed(1).replace(".", ",")}%`;
+}
+
 function comparar(evento) {
   evento.preventDefault();
 
@@ -55,13 +59,23 @@ function comparar(evento) {
   const precoUnitario1Exibicao = precoUnitario1Base * fatorExibicao;
   const precoUnitario2Exibicao = precoUnitario2Base * fatorExibicao;
 
+  const maiorBase = Math.max(precoUnitario1Base, precoUnitario2Base);
+  const menorBase = Math.min(precoUnitario1Base, precoUnitario2Base);
+  const percentual = maiorBase > 0 ? ((maiorBase - menorBase) / maiorBase) * 100 : 0;
+  const largura1 = maiorBase > 0 ? (precoUnitario1Base / maiorBase) * 100 : 0;
+  const largura2 = maiorBase > 0 ? (precoUnitario2Base / maiorBase) * 100 : 0;
+
+  let vencedor = 0;
+  if (precoUnitario1Base < precoUnitario2Base) vencedor = 1;
+  else if (precoUnitario2Base < precoUnitario1Base) vencedor = 2;
+
   let mensagemTipo, mensagemTexto;
-  if (precoUnitario1Base < precoUnitario2Base) {
+  if (vencedor === 1) {
     mensagemTipo = "success";
-    mensagemTexto = "✅ Produto 1 tem melhor custo-benefício.";
-  } else if (precoUnitario2Base < precoUnitario1Base) {
+    mensagemTexto = `✅ Produto 1 é ${formatarPercentual(percentual)} mais barato que o Produto 2.`;
+  } else if (vencedor === 2) {
     mensagemTipo = "success";
-    mensagemTexto = "✅ Produto 2 tem melhor custo-benefício.";
+    mensagemTexto = `✅ Produto 2 é ${formatarPercentual(percentual)} mais barato que o Produto 1.`;
   } else {
     mensagemTipo = "info";
     mensagemTexto = "⚖️ Ambos os produtos têm o mesmo custo por unidade.";
@@ -69,15 +83,19 @@ function comparar(evento) {
 
   resultado.hidden = false;
   resultado.innerHTML = `
-    <h2>📊 Resultados da Comparação:</h2>
-    <div class="metricas">
-      <div class="metrica">
+    <h2>📊 Resultado da Comparação</h2>
+    <div class="comparacao">
+      <div class="produto-resultado ${vencedor === 1 ? "vencedor" : ""}">
+        ${vencedor === 1 ? '<span class="badge">Melhor preço</span>' : ""}
         <div class="rotulo">Produto 1</div>
-        <div class="valor">${formatarReais(precoUnitario1Exibicao)} por ${sufixo}</div>
+        <div class="valor">${formatarReais(precoUnitario1Exibicao)}<span class="unidade"> / ${sufixo}</span></div>
+        <div class="barra"><div class="barra-fill${vencedor === 1 ? " ganha" : ""}" style="width:${largura1}%"></div></div>
       </div>
-      <div class="metrica">
+      <div class="produto-resultado ${vencedor === 2 ? "vencedor" : ""}">
+        ${vencedor === 2 ? '<span class="badge">Melhor preço</span>' : ""}
         <div class="rotulo">Produto 2</div>
-        <div class="valor">${formatarReais(precoUnitario2Exibicao)} por ${sufixo}</div>
+        <div class="valor">${formatarReais(precoUnitario2Exibicao)}<span class="unidade"> / ${sufixo}</span></div>
+        <div class="barra"><div class="barra-fill${vencedor === 2 ? " ganha" : ""}" style="width:${largura2}%"></div></div>
       </div>
     </div>
     <div class="msg ${mensagemTipo}">${mensagemTexto}</div>

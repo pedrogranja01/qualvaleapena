@@ -98,6 +98,12 @@ input, select {
   background: var(--bg);
   color: var(--text);
   font-size: 1rem;
+  transition: border-color 0.15s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
 }
 
 hr {
@@ -121,6 +127,12 @@ hr {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+  opacity: 0.9;
 }
 
 .btn.primario {
@@ -131,6 +143,12 @@ hr {
 
 .resultado {
   margin-top: 24px;
+  animation: aparecer 0.25s ease;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .resultado h2 {
@@ -138,7 +156,7 @@ hr {
   margin-bottom: 10px;
 }
 
-.metricas {
+.comparacao {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
@@ -146,25 +164,69 @@ hr {
 }
 
 @media (max-width: 480px) {
-  .metricas { grid-template-columns: 1fr; }
+  .comparacao { grid-template-columns: 1fr; }
 }
 
-.metrica {
+.produto-resultado {
+  position: relative;
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 12px 14px;
+  padding: 14px;
   background: var(--card);
 }
 
-.metrica .rotulo {
+.produto-resultado.vencedor {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.produto-resultado .badge {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.produto-resultado .rotulo {
   font-size: 0.8rem;
   color: var(--muted);
 }
 
-.metrica .valor {
+.produto-resultado .valor {
   font-size: 1.15rem;
   font-weight: 700;
   margin-top: 2px;
+}
+
+.produto-resultado .valor .unidade {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.barra {
+  margin-top: 10px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.barra-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--muted);
+  transition: width 0.3s ease;
+}
+
+.barra-fill.ganha {
+  background: var(--accent);
 }
 
 .msg {
